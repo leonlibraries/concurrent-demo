@@ -16,7 +16,7 @@ public class WaitAndNotifyDemo {
     public static void main(String[] args) throws Exception {
         Thread waitThread = new Thread(new Wait(),"WaitThread");
         waitThread.start();
-        SleepUtils.sleepFor(1);
+        SleepUtils.sleepForSecond(1);
         Thread notifyThread = new Thread(new Notify(),"NotifyThread");
         notifyThread.start();
     }
@@ -55,13 +55,13 @@ public class WaitAndNotifyDemo {
                         + new SimpleDateFormat("HH:mm:ss").format(new Date()));
                 lock.notifyAll();
                 flag = false;
-                SleepUtils.sleepFor(5);
+                SleepUtils.sleepForSecond(5);
             }
             // 再次加锁
             synchronized (lock) {
                 System.out.println(Thread.currentThread() + " hold lock. notify @ "
                         + new SimpleDateFormat("HH:mm:ss").format(new Date()));
-                SleepUtils.sleepFor(5);
+                SleepUtils.sleepForSecond(5);
             }
         }
     }

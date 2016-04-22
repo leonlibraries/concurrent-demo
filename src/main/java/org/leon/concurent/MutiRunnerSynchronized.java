@@ -16,23 +16,23 @@ public class MutiRunnerSynchronized {
         t2.start();
     }
 
-    static class Runner1 implements Runnable {
+    private static class Runner1 implements Runnable {
         @Override
         public void run() {
             synchronized (lock){
                 System.out.println("Runner1 start");
-                SleepUtils.sleepFor(5);
+                SleepUtils.sleepForSecond(5);
                 System.out.println("Runner1 end");
             }
         }
     }
 
-    static class Runner2 implements Runnable {
+    private static class Runner2 implements Runnable {
         @Override
         public void run() {
             synchronized (lock){
                 System.out.println("Runner2 start");
-                SleepUtils.sleepFor(5);
+                SleepUtils.sleepForSecond(5);
                 System.out.println("Runner2 end");
             }
         }

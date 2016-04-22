@@ -16,7 +16,7 @@ public class ThreadJoinDemo {
             previous = thread;
         }
         System.out.println("这是一个良好的开始");
-        SleepUtils.sleepFor(5);
+        SleepUtils.sleepForSecond(5);
     }
 
     private static class Domino implements Runnable {
