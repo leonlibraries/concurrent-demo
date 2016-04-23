@@ -32,13 +32,14 @@ public class ConnectionPool {
     public Connection fetchConnection(long mills) throws InterruptedException {
         synchronized (pool) {
             // 不设置超时,将陷入无线等待
+            System.out.println("FetchConnection start! timeout : " + mills + " ms");
             if (mills <= 0) {
                 while (pool.isEmpty()) {
                     // 当连接池没有资源的时候,pool陷入等待,并且把锁交出去,等到被唤醒并且获得锁之后,代码继续执行
                     pool.wait();
                 }
+                System.out.println("FetchConnection end! timeout : " + mills + " ms");
                 return pool.removeFirst();
-
             }
             // 设置超时时间
             else {
@@ -50,8 +51,13 @@ public class ConnectionPool {
                     remaining = future - System.currentTimeMillis();
                 }
                 Connection result = null;
-                if (!pool.isEmpty()){
+                if (!pool.isEmpty()) {
                     result = pool.removeFirst();
+                }
+                if (result == null) {
+                    System.out.println("FetchConnection end! timeout : " + mills + " ms, BUT FAILED!!!");
+                } else {
+                    System.out.println("FetchConnection end! timeout : " + mills + " ms");
                 }
                 return result;
             }

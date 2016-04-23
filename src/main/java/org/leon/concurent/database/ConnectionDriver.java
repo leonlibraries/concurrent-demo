@@ -12,18 +12,19 @@ import java.sql.Connection;
  */
 public class ConnectionDriver {
 
-    private static class ConnectionHandler implements InvocationHandler{
+    private static class ConnectionHandler implements InvocationHandler {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if (method.getName().equals("commit")){
+            if (method.getName().equals("commit")) {
                 SleepUtils.sleepForMillsSecond(100);
             }
             return null;
         }
     }
+
     // 创建一个Connection代理,在commit时休眠1秒
     static Connection createConnection() {
         return (Connection) Proxy.newProxyInstance(ConnectionDriver.class.getClassLoader(),
-                new Class<?>[]{Connection.class},new ConnectionHandler());
+                new Class<?>[] { Connection.class }, new ConnectionHandler());
     }
 }
