@@ -1,23 +1,24 @@
-package org.leon.concurent;
+package org.leon.concurent.volatileUsage;
+
+import org.leon.concurent.SleepUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- *
- *
+ * （volatile用法系列）<br/>
  * Created by LeonWong on 16/4/21.
  */
 public class WaitAndNotifyDemo {
 
-    private static boolean flag = true;
+    private static volatile boolean flag = true;
     private static final Object lock = new Object();
 
     public static void main(String[] args) throws Exception {
-        Thread waitThread = new Thread(new Wait(),"WaitThread");
+        Thread waitThread = new Thread(new Wait(), "WaitThread");
         waitThread.start();
         SleepUtils.sleepForSecond(1);
-        Thread notifyThread = new Thread(new Notify(),"NotifyThread");
+        Thread notifyThread = new Thread(new Notify(), "NotifyThread");
         notifyThread.start();
     }
 
