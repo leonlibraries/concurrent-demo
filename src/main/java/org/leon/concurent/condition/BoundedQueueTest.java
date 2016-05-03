@@ -9,7 +9,7 @@ import org.leon.concurent.SleepUtils;
  */
 public class BoundedQueueTest {
 
-    BoundedQueue<String> boundedQueue = new BoundedQueue<>(10);
+    private BoundedQueue<String> boundedQueue = new BoundedQueue<>(10);
 
     @Test
     public void testBoundedQueue() throws InterruptedException {
@@ -25,7 +25,7 @@ public class BoundedQueueTest {
                 + boundedQueue.getRemoveIndex() + ",count为" + boundedQueue.getCount());
     }
 
-    class DoRemove implements Runnable {
+    private class DoRemove implements Runnable {
         @Override
         public void run() {
             try {
@@ -36,7 +36,7 @@ public class BoundedQueueTest {
         }
     }
 
-    class DoAdd implements Runnable {
+    private class DoAdd implements Runnable {
         @Override
         public void run() {
             try {
