@@ -31,9 +31,7 @@ public class ExecutorPoolServiceTest {
         try {
             System.out.println(futureNoRet.get());
             System.out.println(futureRet.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
     }
