@@ -1,4 +1,4 @@
-package readwrite;
+package org.leon.concurent.readwrite;
 
 import java.util.HashMap;
 import java.util.Map;

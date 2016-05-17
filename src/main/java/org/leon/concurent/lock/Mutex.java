@@ -7,6 +7,7 @@ import java.util.concurrent.locks.Lock;
 
 /**
  * 独占锁Mutex是一个自定义的同步组件,在同一时刻只允许一个线程占有锁<br/>
+ * 
  * Created by LeonWong on 16/4/26.
  */
 public class Mutex implements Lock {
