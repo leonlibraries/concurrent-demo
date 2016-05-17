@@ -19,9 +19,7 @@ public class ExecutorPoolServiceTest {
      */
     @Test
     public void testSubmit() {
-        Future futureNoRet = executorService.submit(() -> {
-            System.out.println("OK");
-        });
+        Future futureNoRet = executorService.submit(() -> System.out.println("OK"));
 
         Future futureRet = executorService.submit(() -> {
             System.out.println("OK");
