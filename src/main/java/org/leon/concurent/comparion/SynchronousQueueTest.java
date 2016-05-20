@@ -1,0 +1,50 @@
+package org.leon.concurent.comparion;
+
+import java.util.concurrent.*;
+
+/**
+ * Created by LeonWong on 16/5/18.
+ */
+public class SynchronousQueueTest {
+    static ExecutorService e = Executors.newFixedThreadPool(2);
+    static int N = 1000000;
+
+    public static void main(String[] args) throws Exception {
+        for (int i = 0; i < 10; i++) {
+            int length = (i == 0) ? 1 : i * 5;
+            System.out.print(length + "\t");
+            System.out.print(doTest(new LinkedBlockingQueue<Integer>(length), N) + "\t");
+            System.out.print(doTest(new ArrayBlockingQueue<Integer>(length), N) + "\t");
+            System.out.print(doTest(new SynchronousQueue<Integer>(), N));
+            System.out.println();
+        }
+
+        e.shutdown();
+    }
+
+    private static long doTest(final BlockingQueue<Integer> q, final int n) throws Exception {
+        long t = System.nanoTime();
+
+        e.submit(() -> {
+            for (int i = 0; i < n; i++)
+                try {
+                    q.put(i);
+                } catch (InterruptedException ex) {
+                }
+        });
+
+        Long r = e.submit(() -> {
+            long sum = 0;
+            for (int i = 0; i < n; i++)
+                try {
+                    sum += q.take();
+                } catch (InterruptedException ex) {
+                }
+            return sum;
+        }).get();
+        t = System.nanoTime() - t;
+
+        return (long) (1000000000.0 * N / t); // Throughput, items/sec
+    }
+
+}
