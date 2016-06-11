@@ -5,9 +5,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * 有界队列<br/>
- * 当队列为空,队列获取操作将会阻塞获取线程,直到队列中有新元素;<br/>
- * 当队列已满,
+ * 有界阻塞队列<br/>
+ * 当队列为空,队列将会阻塞删除并获取操作的线程,直到队列中有新元素;<br/>
+ * 当队列已满,队列将会阻塞添加操作的线程，直到队列有空位置；
  * <p>
  * Created by LeonWong on 16/4/29.
  */
@@ -37,7 +37,7 @@ public class BoundedQueue<T> {
         lock.lock();
         try {
             while (items.length == count) {
-                System.out.println("添加队列--陷入等待");
+                System.out.println("添加队列,队列满,陷入等待");
                 notFull.await();
             }
             items[addIndex] = t;
@@ -59,7 +59,7 @@ public class BoundedQueue<T> {
         lock.lock();
         try {
             while (count == 0) {
-                System.out.println("删除队列--陷入等待");
+                System.out.println("删除并获取队列,队列为空,陷入等待");
                 notEmpty.await();
             }
             Object tmp = items[removeIndex];
@@ -106,4 +106,3 @@ public class BoundedQueue<T> {
     }
 
 }
-

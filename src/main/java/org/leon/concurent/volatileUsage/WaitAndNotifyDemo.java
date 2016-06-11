@@ -1,25 +1,27 @@
 package org.leon.concurent.volatileUsage;
 
+import org.junit.Test;
 import org.leon.concurent.SleepUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * （volatile用法系列）<br/>
- * Created by LeonWong on 16/4/21.
- */
 public class WaitAndNotifyDemo {
 
+    // 共享内存变量
     private static volatile boolean flag = true;
+
     private static final Object lock = new Object();
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void doLauncher() throws Exception {
         Thread waitThread = new Thread(new Wait(), "WaitThread");
         waitThread.start();
         SleepUtils.sleepForSecond(1);
         Thread notifyThread = new Thread(new Notify(), "NotifyThread");
         notifyThread.start();
+        // 防止主线程关闭后导致子线程关闭
+        SleepUtils.sleepForSecond(1000000);
     }
 
     private static class Wait implements Runnable {
@@ -36,10 +38,11 @@ public class WaitAndNotifyDemo {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    System.out.println("====lock被唤醒继续执行====");
+                    System.out.println(Thread.currentThread() + " Thread has been woke!!!!. wait @ "
+                            + new SimpleDateFormat("HH:mm:ss").format(new Date()));
                 }
                 // 条件满足,完成工作
-                System.out.println(Thread.currentThread() + " flag is false. running @ "
+                System.out.println(Thread.currentThread() + " flag is false. done!!! @ "
                         + new SimpleDateFormat("HH:mm:ss").format(new Date()));
             }
         }
@@ -54,13 +57,15 @@ public class WaitAndNotifyDemo {
                 // 直到当前线程释放了lock后,waitThread才能从wait方法中返回
                 System.out.println(Thread.currentThread() + " hold lock. notify @ "
                         + new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                System.out.println(Thread.currentThread() + " do notifyAll,but I wanna sleep 4 5 secs. notify @ "
+                        + new SimpleDateFormat("HH:mm:ss").format(new Date()));
                 lock.notifyAll();
                 flag = false;
                 SleepUtils.sleepForSecond(5);
             }
             // 再次加锁
             synchronized (lock) {
-                System.out.println(Thread.currentThread() + " hold lock. notify @ "
+                System.out.println(Thread.currentThread() + " hold lock another 5 secs and. notify @ "
                         + new SimpleDateFormat("HH:mm:ss").format(new Date()));
                 SleepUtils.sleepForSecond(5);
             }

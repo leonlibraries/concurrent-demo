@@ -16,8 +16,8 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class FairAndUnfairTest {
 
-    private static Lock fairLock = new ReentrantLock2(true);
-    private static Lock unfairLock = new ReentrantLock2(false);
+    private static Lock fairLock = new ReentrantLockRev(true);
+    private static Lock unfairLock = new ReentrantLockRev(false);
 
     @Test
     public void fair() {
@@ -30,7 +30,7 @@ public class FairAndUnfairTest {
     }
 
     /**
-     * 启动五个Job
+     * 启动十个Job
      * 
      * @param lock
      */
@@ -49,23 +49,24 @@ public class FairAndUnfairTest {
 
         @Override
         public void run() {
-            // 连续多次打印当前Tread和队列中的Thread
-            for (int i = 0; i < 4; i++) {
-                lock.lock();
-                try {
+            lock.lock();
+            try {
+                // 连续多次打印当前Tread和队列中的Thread
+                for (int i = 0; i < 6; i++) {
                     System.out.println("Lock by ['" + Thread.currentThread().getName() + "']");
-                } finally {
-                    lock.unlock();
                 }
+            } finally {
+                lock.unlock();
             }
         }
     }
 
-    private static class ReentrantLock2 extends ReentrantLock {
-        public ReentrantLock2(boolean fair) {
+    private static class ReentrantLockRev extends ReentrantLock {
+        public ReentrantLockRev(boolean fair) {
             super(fair);
         }
 
+        // 颠倒列表顺序
         public Collection<Thread> getQueuedThreads() {
             List<Thread> threads = new ArrayList<Thread>(super.getQueuedThreads());
             Collections.reverse(threads);

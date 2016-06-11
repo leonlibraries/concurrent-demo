@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by LeonWong on 16/4/29.
  */
 public class ConditionUseCase {
+
     Lock lock = new ReentrantLock();
     Condition condition = lock.newCondition();
 
